@@ -69,7 +69,7 @@ if __name__=='__main__':
     simpledrone.takeoff(takeoff_position, airspeed_ms)
     
     #THIS has to be the Unreal ID of the object
-    target_object = "Sphere_2"
+    target_object = "Target_Obj2"
     object_vector = simpledrone.get_object_position(target_object)
     offset_height_m = -20 # REMEMBER NEGATIVE IS UP IN Z
     print("object location is: ", object_vector)  
