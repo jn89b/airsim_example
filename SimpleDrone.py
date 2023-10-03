@@ -37,9 +37,9 @@ class SimpleFlightDrone():
     def get_current_position(self) -> list:
         return self.client.simGetGroundTruthKinematics().position
     
-    def move_to_position(self, position:list, vel_ms:float) -> None:
+    def move_to_position(self, position:list, vel_ms:float, timeout_sec:float=3) -> None:
         self.client.moveToPositionAsync(
-            position[0], position[1], position[2], vel_ms).join()    
+            position[0], position[1], position[2], vel_ms, timeout_sec).join()    
 
     def get_object_position(self, object_name:str) -> list:
         return self.client.simGetObjectPose(object_name).position
@@ -73,11 +73,13 @@ if __name__=='__main__':
     object_vector = simpledrone.get_object_position(target_object)
     offset_height_m = -20 # REMEMBER NEGATIVE IS UP IN Z
     print("object location is: ", object_vector)  
+    dt = 0.1 
     
     while True:
         try:
-            object_location = [object_vector.x_val, object_vector.y_val, offset_height_m]
-            simpledrone.move_to_position(object_location, airspeed_ms)
+            object_vector = simpledrone.get_object_position(target_object)
+            object_location = [object_vector.x_val, object_vector.y_val, object_vector.z_val + offset_height_m]
+            simpledrone.move_to_position(object_location, airspeed_ms, dt)
             
         except KeyboardInterrupt:
             print("Keyboard Interrupt")
